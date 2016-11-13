@@ -14,6 +14,9 @@
 		1683F42D1DD8C93E00983F0A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1683F42B1DD8C93E00983F0A /* LaunchScreen.storyboard */; };
 		1683F4381DD8C93E00983F0A /* JTSegmentControlDemoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1683F4371DD8C93E00983F0A /* JTSegmentControlDemoTests.swift */; };
 		1683F4431DD8C93E00983F0A /* JTSegmentControlDemoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1683F4421DD8C93E00983F0A /* JTSegmentControlDemoUITests.swift */; };
+		1683F4541DD8C99D00983F0A /* JTConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1683F4511DD8C99D00983F0A /* JTConstant.swift */; };
+		1683F4551DD8C99D00983F0A /* JTSegmentControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1683F4521DD8C99D00983F0A /* JTSegmentControl.swift */; };
+		1683F4561DD8C99D00983F0A /* JTSegmentPattern.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1683F4531DD8C99D00983F0A /* JTSegmentPattern.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +50,9 @@
 		1683F43E1DD8C93E00983F0A /* JTSegmentControlDemoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JTSegmentControlDemoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1683F4421DD8C93E00983F0A /* JTSegmentControlDemoUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JTSegmentControlDemoUITests.swift; sourceTree = "<group>"; };
 		1683F4441DD8C93E00983F0A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1683F4511DD8C99D00983F0A /* JTConstant.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JTConstant.swift; sourceTree = "<group>"; };
+		1683F4521DD8C99D00983F0A /* JTSegmentControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JTSegmentControl.swift; sourceTree = "<group>"; };
+		1683F4531DD8C99D00983F0A /* JTSegmentPattern.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JTSegmentPattern.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,6 +103,7 @@
 		1683F4211DD8C93E00983F0A /* JTSegmentControlDemo */ = {
 			isa = PBXGroup;
 			children = (
+				1683F4501DD8C98700983F0A /* JTSegmentControl */,
 				1683F4221DD8C93E00983F0A /* AppDelegate.swift */,
 				1683F4241DD8C93E00983F0A /* ViewController.swift */,
 				1683F4261DD8C93E00983F0A /* Main.storyboard */,
@@ -123,6 +130,16 @@
 				1683F4441DD8C93E00983F0A /* Info.plist */,
 			);
 			path = JTSegmentControlDemoUITests;
+			sourceTree = "<group>";
+		};
+		1683F4501DD8C98700983F0A /* JTSegmentControl */ = {
+			isa = PBXGroup;
+			children = (
+				1683F4511DD8C99D00983F0A /* JTConstant.swift */,
+				1683F4521DD8C99D00983F0A /* JTSegmentControl.swift */,
+				1683F4531DD8C99D00983F0A /* JTSegmentPattern.swift */,
+			);
+			path = JTSegmentControl;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -259,8 +276,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1683F4561DD8C99D00983F0A /* JTSegmentPattern.swift in Sources */,
+				1683F4541DD8C99D00983F0A /* JTConstant.swift in Sources */,
 				1683F4251DD8C93E00983F0A /* ViewController.swift in Sources */,
 				1683F4231DD8C93E00983F0A /* AppDelegate.swift in Sources */,
+				1683F4551DD8C99D00983F0A /* JTSegmentControl.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
