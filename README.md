@@ -34,3 +34,9 @@
 ```Swift
 func didSelected(segement: JTSegmentControl, index: Int)
 ```
+
+## Author
+##### JT. Guangzhou_xia
+
+## License
+##### JTSegmentControl is Available under the MIT license.
