@@ -288,8 +288,8 @@ open class JTSegmentControl: UIControl {
     
     //when true, scrolled the itemView to a point when index changed
     open var autoScrollWhenIndexChange = true
-    
-    open var scrollToPointWhenIndexChanged = CGPoint(x: 0.0, y: 0.0)
+    //default self.scrollView.center
+    open var scrollToPointWhenIndexChanged : CGPoint?
     
     open var bounces = false {
         didSet{
@@ -402,7 +402,7 @@ open class JTSegmentControl: UIControl {
         selectedIndex = index
         
         if autoScrollWhenIndexChange {
-            scrollItemToPoint(index: index, point: scrollToPointWhenIndexChanged)
+            scrollItemToPoint(index: index, point: scrollToPointWhenIndexChanged!)
         }
     }
     
