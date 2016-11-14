@@ -35,6 +35,27 @@
 func didSelected(segement: JTSegmentControl, index: Int)
 ```
 
+## Also you can custom 
+```Swift
+    // JTSegmentPattern.swift
+    static let itemTextColor
+    static let itemSelectedTextColor
+  
+    static let itemBackgroundColor
+    static let itemSelectedBackgroundColor
+  
+    //MARK - Text font
+    static let textFont
+    static let selectedTextFont
+    
+    //MARK - slider
+    static let sliderColor
+    static let sliderHeight
+    
+    //MARK - bridge
+    static let bridgeColor
+```
+
 ## Author
 ##### JT. Guangzhou_xia
 
