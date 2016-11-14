@@ -24,6 +24,8 @@ class ViewController: UIViewController {
         view.addSubview(segmentControl!)
         segmentControl?.delegate = self
         segmentControl?.items = ["first", "second", "third", "fouth"]
+        segmentControl?.showBridge(show: true, index: 1)
+        
         
         //MARK - test display
         self.label.text = "this is index:" + String(segmentControl!.selectedIndex)
@@ -48,9 +50,12 @@ class ViewController: UIViewController {
     }
 }
 extension ViewController : JTSegmentControlDelegate {
-    func didSelectedSegement(index: Int) {
+    
+    func didSelected(segement: JTSegmentControl, index: Int) {
         print("current index \(index)")
         self.label.text = "this is index:"+String(index)
+        
+        segement.showBridge(show: false, index: index)
     }
 }
 

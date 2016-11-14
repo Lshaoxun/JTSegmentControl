@@ -11,22 +11,21 @@ import UIKit
 struct JTSegmentPattern {
     
     static let itemTextColor = UIColor.gray
-    
-    static let itemSelectedTextColor = UIColor.blue
-    
+    static let itemSelectedTextColor = color(red: 252.0, green: 107.0, blue: 1.0, alpha: 0.3)
     static let itemBackgroundColor = color(red: 255.0, green: 250.0, blue: 250.0, alpha: 1.0)
-    
-    static let itemSelectedBackgroundColor = color(red: 240.0, green: 240.0, blue: 250.0, alpha: 1.0)
+    static let itemSelectedBackgroundColor = color(red: 252.0, green: 107.0, blue: 1.0, alpha: 0.1)
     
     //MARK - Text font
     static let textFont = UIFont.systemFont(ofSize: 16.0)
     static let selectedTextFont = UIFont.boldSystemFont(ofSize: 19.0)
     
     //MARK - slider
-    static let sliderColor = UIColor.blue
-    
+    static let sliderColor = UIColor.orange
     static let sliderHeight : CGFloat = 5.0
     
+    //MARK - bridge
+    static let bridgeColor = UIColor.red
+    static let bridgeWidth : CGFloat = 7.0
     
     //MARK - inline func
     @inline(__always) static func color(red:Float, green:Float, blue:Float, alpha:Float) -> UIColor {

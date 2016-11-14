@@ -135,9 +135,9 @@
 		1683F4501DD8C98700983F0A /* JTSegmentControl */ = {
 			isa = PBXGroup;
 			children = (
-				1683F4511DD8C99D00983F0A /* JTConstant.swift */,
 				1683F4521DD8C99D00983F0A /* JTSegmentControl.swift */,
 				1683F4531DD8C99D00983F0A /* JTSegmentPattern.swift */,
+				1683F4511DD8C99D00983F0A /* JTConstant.swift */,
 			);
 			path = JTSegmentControl;
 			sourceTree = "<group>";
@@ -525,6 +525,7 @@
 				1683F4491DD8C93E00983F0A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		1683F44A1DD8C93E00983F0A /* Build configuration list for PBXNativeTarget "JTSegmentControlDemoTests" */ = {
 			isa = XCConfigurationList;
@@ -533,6 +534,7 @@
 				1683F44C1DD8C93E00983F0A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		1683F44D1DD8C93E00983F0A /* Build configuration list for PBXNativeTarget "JTSegmentControlDemoUITests" */ = {
 			isa = XCConfigurationList;
@@ -541,6 +543,7 @@
 				1683F44F1DD8C93E00983F0A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

@@ -25,6 +25,18 @@ fileprivate enum JTItemViewState : Int {
 fileprivate class JTItemView : UIView {
     
     fileprivate let titleLabel = UILabel()
+    fileprivate lazy var bridgeView : CALayer = {
+        let view = CALayer()
+        let width = JTSegmentPattern.bridgeWidth
+        view.bounds = CGRect(x: 0.0, y: 0.0, width: width, height: width)
+        view.backgroundColor = JTSegmentPattern.bridgeColor.cgColor
+        view.cornerRadius = view.bounds.size.width * 0.5
+        return view
+    }()
+    
+    fileprivate func showBridge(show:Bool){
+        self.bridgeView.isHidden = !show
+    }
     
     fileprivate var state : JTItemViewState = .Normal {
         didSet{
@@ -100,22 +112,46 @@ fileprivate class JTItemView : UIView {
             self.titleLabel.textColor = self.selectedTextColor
             self.backgroundColor = self.selectedBackgroundColor
         }
+        self.setNeedsLayout()
+        self.layoutIfNeeded()
     }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        titleLabel.frame = bounds
+//        titleLabel.frame = bounds
+//        titleLabel.center = self.center
         titleLabel.textAlignment = .center
-        titleLabel.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+//        titleLabel.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        //
+        
         addSubview(titleLabel)
+        
+        bridgeView.isHidden = true
+        layer.addSublayer(bridgeView)
+        
+        layer.masksToBounds = true
     }
+    
+    fileprivate override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        titleLabel.sizeToFit()
+        
+        titleLabel.center.x = bounds.size.width * 0.5
+        titleLabel.center.y = bounds.size.height * 0.5
+        
+        let width = bridgeView.bounds.size.width
+        let x:CGFloat = titleLabel.frame.maxX - 2.0
+        bridgeView.frame = CGRect(x: x, y: bounds.midY - width, width: width, height: width)
+    }
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 }
 
 @objc public protocol JTSegmentControlDelegate {
-    @objc optional func didSelectedSegement(index: Int)
+    @objc optional func didSelected(segement:JTSegmentControl, index: Int)
 }
 
 open class JTSegmentControl: UIControl {
@@ -131,10 +167,6 @@ open class JTSegmentControl: UIControl {
     }
     open var selectedIndex = 0 {
         willSet{
-            //            guard selectedIndex != newValue else {
-            //                return
-            //            }
-            
             let originItem = self.itemViews[selectedIndex]
             originItem.state = .Normal
             
@@ -142,13 +174,7 @@ open class JTSegmentControl: UIControl {
             selectItem.state = .Selected
         }
     }
-    //    return createItemView(title: title,
-    //    font: self.font,
-    //    selectedFont: self.selectedFont,
-    //    textColor: self.itemTextColor,
-    //    selectedTextColor: self.itemSelectedTextColor,
-    //    backgroundColor: self.itemBackgroundColor,
-    //    selectedBackgroundColor: self.itemSelectedBackgroundColor
+    
     //MARK - color set
     open var itemTextColor = JTSegmentPattern.itemTextColor{
         didSet{
@@ -222,6 +248,15 @@ open class JTSegmentControl: UIControl {
             
             self.contentView.bringSubview(toFront: self.sliderView)
         }
+    }
+    
+    open func showBridge(show:Bool, index:Int){
+        
+        guard index < itemViews.count && index >= 0 else {
+            return
+        }
+        
+        itemViews[index].showBridge(show: show)
     }
     
     fileprivate func removeAllItemView() {
@@ -314,7 +349,7 @@ open class JTSegmentControl: UIControl {
             self.sliderView.center.x = position
         }
         
-        delegate?.didSelectedSegement?(index: index)
+        delegate?.didSelected?(segement: self, index: index)
         selectedIndex = index
     }
     
