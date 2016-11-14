@@ -148,7 +148,7 @@ fileprivate class JTItemView : UIView {
         titleLabel.center.y = bounds.size.height * 0.5
         
         let width = bridgeView.bounds.size.width
-        let x:CGFloat = titleLabel.frame.maxX - 2.0
+        let x:CGFloat = titleLabel.frame.maxX
         bridgeView.frame = CGRect(x: x, y: bounds.midY - width, width: width, height: width)
     }
     
