@@ -9,9 +9,6 @@
 import UIKit
 
 class ViewController: UIViewController {
-
-    var segmentControl : JTSegmentControl?
-    
     
     let label = UILabel()
     
@@ -19,16 +16,31 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         //MARK - init JTSegement
-        let frame = CGRect(x: 10.0, y: 200.0, width: self.view.bounds.size.width - 20.0, height: 44.0)
-        segmentControl = JTSegmentControl(frame: frame)
-        view.addSubview(segmentControl!)
-        segmentControl?.delegate = self
-        segmentControl?.items = ["first", "second", "third", "fouth"]
-        segmentControl?.showBridge(show: true, index: 1)
+        var frame = CGRect(x: 10.0, y: 130.0, width: self.view.bounds.size.width - 20.0, height: 44.0)
+        let segmentControl = JTSegmentControl(frame: frame)
+        segmentControl.delegate = self
+        segmentControl.items = ["first", "second", "third", "fouth"]
+        segmentControl.showBridge(show: true, index: 1)
+        segmentControl.autoScrollWhenIndexChange = false
+        view.addSubview(segmentControl)
+        
+        
+        
+        //MARK - init autoAdjustWidth JTSegement
+        frame = CGRect(x: 10.0, y: 250.0, width: self.view.bounds.size.width - 20.0, height: 44.0)
+        let autoWidthControl = JTSegmentControl(frame: frame)
+        autoWidthControl.delegate = self
+        autoWidthControl.items = ["first", "second", "third", "fouth", "fifth", "sixth", "seventh", "eighth"]
+        autoWidthControl.showBridge(show: true, index: 0)
+        autoWidthControl.selectedIndex = 1
+        autoWidthControl.autoAdjustWidth = true
+        autoWidthControl.bounces = true
+        view.addSubview(autoWidthControl)
+        
         
         
         //MARK - test display
-        self.label.text = "this is index:" + String(segmentControl!.selectedIndex)
+        self.label.text = "this is index:" + String(segmentControl.selectedIndex)
         self.label.sizeToFit()
         label.center.x = self.view.center.x
         label.center.y = self.view.center.y + 50.0

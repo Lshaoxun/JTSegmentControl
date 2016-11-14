@@ -12,9 +12,11 @@ struct JTSegmentPattern {
     
     static let itemTextColor = UIColor.gray
     static let itemSelectedTextColor = color(red: 252.0, green: 107.0, blue: 1.0, alpha: 0.3)
+    
     static let itemBackgroundColor = color(red: 255.0, green: 250.0, blue: 250.0, alpha: 1.0)
     static let itemSelectedBackgroundColor = color(red: 252.0, green: 107.0, blue: 1.0, alpha: 0.1)
     
+    static let itemBorder : CGFloat = 20.0
     //MARK - Text font
     static let textFont = UIFont.systemFont(ofSize: 16.0)
     static let selectedTextFont = UIFont.boldSystemFont(ofSize: 19.0)

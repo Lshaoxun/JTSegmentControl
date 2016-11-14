@@ -24,6 +24,17 @@ fileprivate enum JTItemViewState : Int {
 
 fileprivate class JTItemView : UIView {
     
+    fileprivate func itemWidth() -> CGFloat {
+        
+        if let text = titleLabel.text {
+            let string = text as NSString
+            let size = string.size(attributes: [NSFontAttributeName:selectedFont!])
+            return size.width + JTSegmentPattern.itemBorder
+        }
+        
+        return 0.0
+    }
+    
     fileprivate let titleLabel = UILabel()
     fileprivate lazy var bridgeView : CALayer = {
         let view = CALayer()
@@ -118,11 +129,7 @@ fileprivate class JTItemView : UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-//        titleLabel.frame = bounds
-//        titleLabel.center = self.center
         titleLabel.textAlignment = .center
-//        titleLabel.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        //
         
         addSubview(titleLabel)
         
@@ -162,9 +169,28 @@ open class JTSegmentControl: UIControl {
     
     open weak var delegate : JTSegmentControlDelegate?
     
+    open var autoAdjustWidth = false {
+        didSet{
+            
+        }
+    }
+    
+    //recomend to use segmentWidth(index:Int)
     open func segementWidth() -> CGFloat {
         return bounds.size.width / (CGFloat)(itemViews.count)
     }
+    //when autoAdjustWidth is true, the width is not necessarily the same
+    open func segmentWidth(index:Int) -> CGFloat {
+        guard index >= 0 && index < itemViews.count else {
+            return 0.0
+        }
+        if autoAdjustWidth {
+            return itemViews[index].itemWidth()
+        }else{
+            return segementWidth()
+        }
+    }
+    
     open var selectedIndex = 0 {
         willSet{
             let originItem = self.itemViews[selectedIndex]
@@ -259,13 +285,25 @@ open class JTSegmentControl: UIControl {
         itemViews[index].showBridge(show: show)
     }
     
+    
+    //when true, scrolled the itemView to a point when index changed
+    open var autoScrollWhenIndexChange = true
+    
+    open var scrollToPointWhenIndexChanged = CGPoint(x: 0.0, y: 0.0)
+    
+    open var bounces = false {
+        didSet{
+            self.scrollView.bounces = bounces
+        }
+    }
+    
     fileprivate func removeAllItemView() {
         itemViews.forEach { (label) in
             label.removeFromSuperview()
         }
         itemViews.removeAll()
     }
-    
+    private var itemWidths = [CGFloat]()
     private func createItemView(title:String) -> JTItemView {
         return createItemView(title: title,
                               font: self.font,
@@ -293,7 +331,15 @@ open class JTSegmentControl: UIControl {
         return item
     }
     
-    fileprivate lazy var scrollView = UIScrollView()
+    fileprivate lazy var scrollView : UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.alwaysBounceHorizontal = true
+        scrollView.alwaysBounceVertical = false
+        scrollView.showsHorizontalScrollIndicator = false
+        scrollView.showsVerticalScrollIndicator = false
+        scrollView.bounces = false
+        return scrollView
+    }()
     fileprivate lazy var contentView = UIView()
     fileprivate lazy var sliderView : JTSliderView = JTSliderView()
     fileprivate var itemViews = [JTItemView]()
@@ -304,7 +350,10 @@ open class JTSegmentControl: UIControl {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
         setupViews()
+        
+        scrollToPointWhenIndexChanged = scrollView.center
     }
     
     fileprivate func setupViews() {
@@ -317,7 +366,6 @@ open class JTSegmentControl: UIControl {
         contentView.frame = scrollView.bounds
         
         scrollView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        contentView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         
         addTapGesture()
     }
@@ -340,30 +388,57 @@ open class JTSegmentControl: UIControl {
     open func move(to index:Int, animated:Bool) {
         
         let position = centerX(with: index)
-        
         if animated {
             UIView.animate(withDuration: 0.2, animations: {
                 self.sliderView.center.x = position
+                self.sliderView.bounds = CGRect(x: 0.0, y: 0.0, width: self.segmentWidth(index: index), height: self.sliderView.bounds.height)
             })
         }else{
             self.sliderView.center.x = position
+            self.sliderView.bounds = CGRect(x: 0.0, y: 0.0, width: self.segmentWidth(index: index), height: self.sliderView.bounds.height)
         }
         
         delegate?.didSelected?(segement: self, index: index)
         selectedIndex = index
+        
+        if autoScrollWhenIndexChange {
+            scrollItemToPoint(index: index, point: scrollToPointWhenIndexChanged)
+        }
     }
     
-    fileprivate func updateDisplay(selectedIndex:Int) {
-        
+    fileprivate func currentItemX(index:Int) -> CGFloat {
+        if autoAdjustWidth {
+            var x:CGFloat = 0.0
+            for i in 0..<index {
+                x += segmentWidth(index: i)
+            }
+            return x
+        }
+        return segementWidth() * CGFloat(index)
     }
     
     fileprivate func centerX(with index:Int) -> CGFloat {
+        if autoAdjustWidth {
+            return currentItemX(index: index) + segmentWidth(index: index)*0.5
+        }
         return (CGFloat(index) + 0.5)*segementWidth()
     }
     
     private func selectedTargetIndex(gesture: UIGestureRecognizer) -> Int {
         let location = gesture.location(in: contentView)
-        var index = Int(location.x / sliderView.bounds.size.width)
+        var index = 0
+        
+        if autoAdjustWidth {
+            for (i,itemView) in itemViews.enumerated() {
+                if itemView.frame.contains(location) {
+                    index = i
+                    break
+                }
+            }
+        }else{
+            index = Int(location.x / sliderView.bounds.size.width)
+        }
+        
         if index < 0 {
             index = 0
         }
@@ -371,6 +446,30 @@ open class JTSegmentControl: UIControl {
             index = numberOfSegments - 1
         }
         return index
+    }
+    
+    private func scrollItemToCenter(index : Int) {
+        scrollItemToPoint(index: index, point: CGPoint(x: scrollView.bounds.size.width * 0.5, y: 0))
+    }
+    
+    private func scrollItemToPoint(index : Int,point:CGPoint) {
+        
+        let currentX = currentItemX(index: index)
+        
+        let scrollViewWidth = scrollView.bounds.size.width
+        
+        var scrollX = currentX - point.x + segmentWidth(index: index) * 0.5
+        
+        let maxScrollX = scrollView.contentSize.width - scrollViewWidth
+        
+        if scrollX > maxScrollX {
+            scrollX = maxScrollX
+        }
+        if scrollX < 0.0 {
+            scrollX = 0.0
+        }
+        
+        scrollView.setContentOffset(CGPoint(x: scrollX, y: 0.0), animated: true)
     }
     
     required public init?(coder aDecoder: NSCoder) {
@@ -384,19 +483,23 @@ open class JTSegmentControl: UIControl {
             return
         }
         
-        var i=0
-        
         var x:CGFloat = 0.0
         let y:CGFloat = 0.0
-        let width:CGFloat = bounds.size.width / (CGFloat)(itemViews.count)
+        var width:CGFloat = segmentWidth(index: selectedIndex)
         let height:CGFloat = bounds.size.height
         
-        sliderView.frame = CGRect(x: width * (CGFloat)(selectedIndex), y: contentView.bounds.size.height - JTSegmentPattern.sliderHeight, width: width, height: JTSegmentPattern.sliderHeight)
+        sliderView.frame = CGRect(x: currentItemX(index: selectedIndex), y: contentView.bounds.size.height - JTSegmentPattern.sliderHeight, width: width, height: JTSegmentPattern.sliderHeight)
         
-        for label in itemViews {
-            x = width * (CGFloat)(i)
-            label.frame = CGRect(x: x, y: y, width: width, height: height)
-            i += 1;
+        var contentWidth:CGFloat = 0.0
+        
+        for (index,item) in itemViews.enumerated() {
+            x = contentWidth
+            width = segmentWidth(index: index)
+            item.frame = CGRect(x: x, y: y, width: width, height: height)
+            
+            contentWidth += width
         }
+        contentView.frame = CGRect(x: 0.0, y: 0.0, width: contentWidth, height: contentView.bounds.height)
+        scrollView.contentSize = contentView.bounds.size
     }
 }
