@@ -31,7 +31,7 @@ class ViewController: UIViewController {
         let autoWidthControl = JTSegmentControl(frame: frame)
         autoWidthControl.delegate = self
         autoWidthControl.items = ["first", "second", "third", "fouth", "fifth", "sixth", "seventh", "eighth"]
-        autoWidthControl.showBridge(show: true, index: 0)
+        autoWidthControl.showBridge(show: true, index: 4)
         autoWidthControl.selectedIndex = 1
         autoWidthControl.autoAdjustWidth = true
         autoWidthControl.bounces = true
