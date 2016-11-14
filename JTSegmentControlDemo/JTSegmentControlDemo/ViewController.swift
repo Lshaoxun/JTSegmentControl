@@ -14,6 +14,7 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = UIColor.yellow
         
         //MARK - init JTSegement
         var frame = CGRect(x: 10.0, y: 130.0, width: self.view.bounds.size.width - 20.0, height: 44.0)
